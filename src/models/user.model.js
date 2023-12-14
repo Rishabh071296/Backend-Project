@@ -23,37 +23,25 @@ const UserSchema = new Schema(
         index: true
      },
      avatar:{
-        type: String,
-        required : true,
-        unique: true,
-        lowercase : true,
-        trim: true,
-        index: true
+        type: String, 
+        required : true
      },
      coverImage:{
-        type: String,
-        required : true,
-        unique: true,
-        lowercase : true,
-        trim: true,
-        index: true
+        type: String
      },
+     watchHistory:[
+        {
+        type: Schema.Types.ObjectId,
+        ref: "Video"
+    }
+     ],
      password:{
         type: String,
-        required : true,
-        unique: true,
-        lowercase : true,
-        trim: true,
-        index: true
+        required : [true,'Password is required']
      },
      refreshToken:{
-        type: String,
-        required : true,
-        unique: true,
-        lowercase : true,
-        trim: true,
-        index: true
-     },
+        type: String
+     }
 },{timetamps: true}
 
 )
