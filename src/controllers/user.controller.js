@@ -3,6 +3,24 @@ import {ApiError} from "../utils/ApiError.js"
 import {User} from "../models/user.model.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { response } from "express";
+
+// access and referesh token
+
+const generateAccessTokenAndRefereshTokens = async(userId) => {
+    try {
+      const user =   await User.findById(userId)
+      const accessToken = user.generateAccessToken()
+      const refreshToken = user.generateRefreshToken()
+      user.refreshToken = refreshToken
+      await user.save({validateBeforSave: false})
+      return {accessToken,refreshToken} 
+
+    } catch (error) {
+        throw new ApiError(500,"Something went wrong while generation referesh and access token")
+    }
+}
+
 
 //  register user Algo..
 
@@ -129,10 +147,30 @@ if (!isPasswordCorrect) {
     throw new ApiError(401, "User does not exist")
 }
 
+// access and referesh token- create a method and acces the token (method in the top)
 
+const {accessToken,refreshToken} = await generateAccessTokenAndRefereshTokens(user._id)
 
+// send cookie
 
-
+const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+const options = {
+    httpOnly: true,
+    secure: true
+}
+return res
+.status(200)
+.cookie("accessToken", accessToken,options)
+.cookie("refreshToken", refreshToken,options)
+.json(
+    new ApiResponse(
+        200,
+        {
+            user: loggedInUser,accessToken,refreshToken
+        },
+        "User logged In Successfully"
+    )
+)
 });
 
 export {registerUser, loginUser}
