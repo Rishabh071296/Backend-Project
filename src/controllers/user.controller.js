@@ -4,6 +4,7 @@ import {User} from "../models/user.model.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 
+//  register user Algo..
 
 const registerUser = asyncHandler (async (req,res) =>{
    // get user details from frontend
@@ -89,4 +90,49 @@ if (!createdUser) {
 
 })
 
-export {registerUser}
+// Sign in Algo.
+
+const loginUser = asyncHandler (async (req, res) => {
+
+// req body - data
+// username or email
+// find the user
+// password check
+// access and referesh token
+// send cookie
+
+// req body - data
+
+const {email, username, password} = req.body
+
+// username or email
+
+if (!(username || email)){
+    throw new ApiError (400,"Username or email is required")
+}
+
+// find the user
+
+const user = await User.findOne({
+    $or: [{username},{email}]
+})
+
+if (!user) {
+    throw new ApiError(404, "User does not exist")
+}
+
+// password check
+
+const isPasswordValid = await user.isPasswordCorrect (password)
+
+if (!isPasswordCorrect) {
+    throw new ApiError(401, "User does not exist")
+}
+
+
+
+
+
+});
+
+export {registerUser, loginUser}
