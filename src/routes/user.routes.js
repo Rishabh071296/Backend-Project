@@ -34,11 +34,13 @@ router.route("/update-account").patch(verifyJWT,updateAccountDetails)
 //update avatar
 router.route("/avatar").patch(verifyJWT,upload.single("avatar"),updateUserAvatar)
 // update cover image
-router.route("/cover-image").patch(verifyJWT,upload.single("/coverImage"),updateUserCoverImage)
+router.route("/cover-image").patch(verifyJWT,upload.single("coverImage"),updateUserCoverImage)
 //channel profile
 router.route("/c/:username").get(verifyJWT,getUserChannelProfile)
 //WatchHistoy
 router.route("/history").get(verifyJWT,getWatchHistory)
+
+
 
 
 
