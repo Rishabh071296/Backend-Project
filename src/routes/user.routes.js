@@ -22,7 +22,6 @@ router.route("/register").post(
 
 router.route("/login").post(loginUser)
 
-//secured routes
 // logout routes
 router.route("/logout").post(verifyJWT, logoutUser)
 //refresh token routes
@@ -39,10 +38,5 @@ router.route("/cover-image").patch(verifyJWT,upload.single("coverImage"),updateU
 router.route("/c/:username").get(verifyJWT,getUserChannelProfile)
 //WatchHistoy
 router.route("/history").get(verifyJWT,getWatchHistory)
-
-
-
-
-
 
 export default router;
